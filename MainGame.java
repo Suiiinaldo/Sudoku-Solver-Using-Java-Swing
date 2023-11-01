@@ -78,16 +78,14 @@ public class MainGame extends JFrame implements ActionListener{
     }
     @Override
         public void actionPerformed(ActionEvent e) {
-            char ch;
+        int ch;
             for (fields_y =0; fields_y < 9; fields_y++) {
                 for (fields_x =0; fields_x < 9; fields_x++) {
-                    if(fields[fields_x][fields_y].getText().equalsIgnoreCase(""))
+                    if(fields[fields_x][fields_y].getText().equalsIgnoreCase("") ||
+                            fields[fields_x][fields_y].getText().equalsIgnoreCase("."))
                         matrixP[fields_x][fields_y] = 0;
                     else {
-                        ch = fields[fields_x][fields_y].getText().charAt(0);
-                        if (ch == '.')
-                            matrixP[fields_x][fields_y] = 0;
-                        else
+                        ch = Integer.parseInt(fields[fields_x][fields_y].getText());
                             matrixP[fields_x][fields_y] = ch - '0';
                     }
                 }
