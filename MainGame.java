@@ -86,7 +86,7 @@ public class MainGame extends JFrame implements ActionListener{
                         matrixP[fields_x][fields_y] = 0;
                     else {
                         ch = Integer.parseInt(fields[fields_x][fields_y].getText());
-                            matrixP[fields_x][fields_y] = ch - '0';
+                            matrixP[fields_x][fields_y] = ch;
                     }
                 }
             }
