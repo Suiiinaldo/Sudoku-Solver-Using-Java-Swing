@@ -1,11 +1,15 @@
 package com.prakhar;
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 public class MainGame extends JFrame implements ActionListener{
+    static int ar[][] = new int[9][9];
     JButton solve = new JButton();
     JButton reset = new JButton();
+    JButton generate = new JButton();
     JButton check = new JButton();
     JLabel Failed = new JLabel();
     JLabel congrats = new JLabel();
@@ -35,9 +39,10 @@ public class MainGame extends JFrame implements ActionListener{
     }
     MainGame()
     {
-        solve.setBounds(55,390,85, 30);
-        reset.setBounds(145,390,85, 30);
-        check.setBounds(235,390,85, 30);
+        solve.setBounds(85,425,100, 30);
+        reset.setBounds(200,385,100, 30);
+        check.setBounds(200,425,100, 30);
+        generate.setBounds(85,385,100,30);
         Failed.setText("Invalid Sudoku!!");
         congrats.setText("Congratulations! Champion");
         allcell.setText("All Cells are not Filled");
@@ -53,10 +58,12 @@ public class MainGame extends JFrame implements ActionListener{
         solve.setText("Solve");
         reset.setText("Reset");
         check.setText("Check");
+        generate.setText("Generate");
         solve.addActionListener(this);
         reset.addActionListener(this);
         check.addActionListener(this);
-        this.setSize(400,480);
+        generate.addActionListener(this);
+        this.setSize(400,500);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLayout(null);
@@ -68,6 +75,7 @@ public class MainGame extends JFrame implements ActionListener{
         this.add(solve);
         this.add(reset);
         this.add(check);
+        this.add(generate);
         ImageIcon image=new ImageIcon("./logo.jpg");
         this.setIconImage(image.getImage());
         for (fields_y =0; fields_y < 9; fields_y++) {
@@ -100,6 +108,9 @@ public class MainGame extends JFrame implements ActionListener{
                             }
                         }
                     }
+                    congrats.setVisible(false);
+                    allcell.setVisible(false);
+                    Failed.setVisible(false);
                 }
                 else
                 {
@@ -154,6 +165,18 @@ public class MainGame extends JFrame implements ActionListener{
                         congrats.setVisible(true);
                         allcell.setVisible(false);
                     }
+            }
+            if(e.getSource() == generate)
+            {
+                generateSudoku();
+                for (fields_y =0; fields_y < 9; fields_y++) {
+                    for (fields_x =0; fields_x < 9; fields_x++) {
+                        if(ar[fields_x][fields_y] == 0)
+                            fields[fields_x][fields_y].setText("");
+                        else
+                            fields[fields_x][fields_y].setText(""+ar[fields_x][fields_y]);
+                    }
+                }
             }
         }
 
@@ -212,5 +235,51 @@ public class MainGame extends JFrame implements ActionListener{
             }
         }
         return true;
+    }
+    public static void generateSudoku(){
+        int N = 3;
+        for(int i = 0;i<N*N;i++)
+        {
+            for(int j = 0;j<N*N;j++)
+                ar[i][j] = 1;
+        }
+        int k=0;
+        int fillCount =1;
+        int subGrid=1;
+        for (int i=0;i<N*N;i++) {
+            if (k == N) {
+                k = 1;
+                subGrid++;
+                fillCount = subGrid;
+            } else {
+                k++;
+                if (i != 0)
+                    fillCount = fillCount + N;
+            }
+            for (int j = 0; j < N * N; j++) {
+                if (fillCount == N * N) {
+                    ar[i][j] = fillCount;
+                    fillCount = 1;
+                } else {
+                    ar[i][j] = fillCount++;
+                }
+            }
+        }
+        for(int i = 0;i < 9;i++)
+        {
+            for(int j = 0;j<9;j++)
+            {
+                Random rand = new Random();
+                int a = rand.nextInt(100);
+                if(a % 2 == 0)
+                    ar[i][j] = 0;
+                System.out.print(ar[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    public static void main(String[] args) {
+        MainGame ob = new MainGame();
+        generateSudoku();
     }
 }
